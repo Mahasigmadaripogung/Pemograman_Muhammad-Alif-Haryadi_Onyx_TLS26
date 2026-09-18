@@ -1,0 +1,64 @@
+#include <iostream>
+
+int calculateModulo(int value, int divisor) {
+    int remainder = value % divisor;
+    if (remainder < 0) {
+        remainder += divisor;
+    }
+    return remainder;
+}
+
+void processAstronautSelection(int N, int K) {
+    int* astronauts = new int[N];
+    for (int i = 0; i < N; i++) {
+        astronauts[i] = i + 1;
+    }
+
+    int currentIndex = 0;
+    int remainingCount = N;
+
+    std::cout << "Elimination Order: ";
+
+    while (remainingCount > 1) {
+        currentIndex = calculateModulo(currentIndex + K - 1, remainingCount);
+        int eliminatedAstronaut = astronauts[currentIndex];
+
+        std::cout << eliminatedAstronaut << " ";
+
+        for (int i = currentIndex; i < remainingCount - 1; i++) {
+            astronauts[i] = astronauts[i + 1];
+        }
+        remainingCount--;
+
+        if (eliminatedAstronaut % 2 == 0) {
+            K += 2; // Even ID rule
+        } else {
+            K -= 1; // Odd ID rule
+        }
+
+        if (K < 2) {
+            K = 2;
+        }
+    }
+
+    std::cout << "\nLast Remaining Astronaut: " << astronauts[0] << std::endl;
+
+    delete[] astronauts;
+}
+
+int main() {
+    int N, K;
+    std::cout << "Enter number of astronauts (N): ";
+    std::cin >> N;
+    std::cout << "Enter initial elimination step (K): ";
+    std::cin >> K;
+
+    if (N <= 0 || K < 2) {
+        std::cout << "Invalid input! N must be > 0 and K must be >= 2." << std::endl;
+        return 1;
+    }
+
+    processAstronautSelection(N, K);
+
+    return 0;
+}
