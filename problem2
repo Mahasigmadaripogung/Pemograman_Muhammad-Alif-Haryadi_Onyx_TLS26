@@ -1,0 +1,60 @@
+#include <iostream>
+
+int customLength(const char* str) {
+    int length = 0;
+    while (str[length] != '\0') {
+        length++;
+    }
+    return length;
+}
+
+char customToUpper(char c) {
+    if (c >= 'a' && c <= 'z') {
+        return c - 'a' + 'A';
+    }
+    return c;
+}
+
+bool customIsAlpha(char c) {
+    return (c >= 'A' && c <= 'Z');
+}
+
+void encryptAlienMessage(char* message) {
+    int len = customLength(message);
+    if (len == 0) return;
+
+    for (int i = 0; i < len; i++) {
+        message[i] = customToUpper(message[i]);
+    }
+
+    char previousOriginal = message[0];
+
+    for (int i = 1; i < len; i++) {
+        if (customIsAlpha(message[i])) {
+            char currentOriginal = message[i];
+
+            int shiftValue = (previousOriginal - 'A') + 1;
+
+            int currentVal = message[i] - 'A';
+
+            int newVal = (currentVal + shiftValue) % 26;
+
+            message[i] = 'A' + newVal;
+
+            previousOriginal = currentOriginal;
+        }
+    }
+}
+
+int main() {
+    char message[1000];
+
+    std::cout << "Enter the secret message: ";
+    std::cin >> message;
+
+    encryptAlienMessage(message);
+
+    std::cout << "Encrypted Message: " << message << std::endl;
+
+    return 0;
+}
